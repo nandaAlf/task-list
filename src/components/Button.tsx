@@ -1,11 +1,6 @@
 import { memo } from 'react'
 import type { ButtonProps } from '../types/button'
-// import { ButtonProps } from './Button.types'
 
-// import clsx from 'clsx'
-/**
- * Botón estilizado y reutilizable.
- */
 export const Button = memo(function Button({
   children,
   onClick,

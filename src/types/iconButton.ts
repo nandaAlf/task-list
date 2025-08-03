@@ -3,6 +3,6 @@ export interface IconButtonProps
   icon: React.ReactNode;
   label: string;
   onClick?: () => void;
-  showLabelAt?: string; // clase tailwind como "md:inline" o personalizada
-   variant?: "filled" | "outlined";
+  showLabelAt?: string; // breakpoint 1230px
+  variant?: "filled" | "outlined";
 }
