@@ -25,4 +25,4 @@ dist-ssr
 
 venv/
 .env
-task_api.db
+# task_api.db
