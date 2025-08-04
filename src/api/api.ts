@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Task } from "../types/task";
 
-const API_URL = "http://localhost:8000"; // Ajusta si es necesario
+const API_URL = "http://localhost:8000";
 
 // Guardar y recuperar token del localStorage
 const getToken = () => localStorage.getItem("token");
@@ -21,6 +21,7 @@ api.interceptors.request.use((config) => {
 
 // LOGIN
 export const login = async (username: string, password: string) => {
+  // alert("login")
   const response = await axios.post(
     `${API_URL}/token`,
     new URLSearchParams({
@@ -40,6 +41,7 @@ export const login = async (username: string, password: string) => {
 // CRUD de tareas
 export const getTasks = async () => {
   const response = await api.get("/tasks");
+  console.log("daaa",response)
   return response.data;
 };
 

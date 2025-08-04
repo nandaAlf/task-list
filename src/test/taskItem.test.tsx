@@ -18,10 +18,7 @@ describe("TaskItem", () => {
         id={mockTask.id}
         title={mockTask.title}
         completed={mockTask.completed}
-        onToggle={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
+        onToggle={()=>{} } onDelete={()=>{}} onUpdate={()=>{}}      />
     );
     expect(
       screen.getByText((content) => content.includes("Test"))

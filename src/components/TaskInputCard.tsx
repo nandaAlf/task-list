@@ -1,4 +1,4 @@
-import { HighlightedInput } from "./HighlightedInput";
+
 import { IconButton } from "./IconButton";
 import { Button } from "./Button";
 import {
@@ -12,6 +12,8 @@ import {
   Save,
 } from "react-feather";
 import { useIsMobile } from "../hook/useIsMobile";
+import { HighlightedInput } from "./HighlightedInput";
+
 
 interface Props {
   inputText: string;
@@ -27,7 +29,7 @@ export function TaskInputCard({
   onInputChange,
   onCancel,
   onOK,
-  onAdd,
+  // onAdd,
   currentState,
 }: Props) {
   const isMobile = useIsMobile();
@@ -52,7 +54,12 @@ export function TaskInputCard({
 
       <div className="flex items-center justify-between bg-gray-50 border-t border-t-gray-100 p-2">
         <div className="flex items-center gap-2 bg">
-          <IconButton icon={<Maximize2 />} variant="filled" label="Open"   className="mr-4" />
+          <IconButton
+            icon={<Maximize2 />}
+            variant="filled"
+            label="Open"
+            className="mr-4"
+          />
           <IconButton icon={<Calendar />} label="Today" />
           <IconButton icon={<Unlock />} label="Public" />
           <IconButton icon={<Sun />} label="Normal" />
@@ -71,7 +78,7 @@ export function TaskInputCard({
             {currentState === "input" ? (
               <Button onClick={onOK}>OK</Button>
             ) : (
-              <Button onClick={onAdd}>Add</Button>
+              <Button onClick={onOK}>Add</Button>
             )}
           </div>
         ) : (
@@ -83,7 +90,7 @@ export function TaskInputCard({
               </Button>
             )}
             {currentState === "typing" && (
-              <Button onClick={onAdd} className="p-2">
+              <Button onClick={onOK} className="p-2">
                 <Save className="w-4 h-4" />
               </Button>
             )}

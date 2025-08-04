@@ -1,7 +1,13 @@
 // useTasks.ts
 import { useEffect, useState } from "react";
 import type { Task } from "../types/task";
-import { getTasks, createTask, patchStatus,  } from "../api/api";
+import {
+  getTasks,
+  createTask,
+  patchStatus,
+  deleteTask,
+  updateTask,
+} from "../api/api";
 
 type ViewState = "initial" | "input" | "typing";
 
@@ -9,6 +15,7 @@ export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentState, setCurrentState] = useState<ViewState>("initial");
   const [inputText, setInputText] = useState("");
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -32,10 +39,10 @@ export function useTasks() {
     setCurrentState(value.trim() ? "typing" : "input");
   };
 
-  const handleOK = () => {
-    setCurrentState("initial");
-    setInputText("");
-  };
+  // const handleOK = () => {
+  //   setCurrentState("initial");
+  //   setInputText("");
+  // };
 
   const handleAdd = async () => {
     if (inputText.trim() !== "") {
@@ -44,7 +51,7 @@ export function useTasks() {
           title: inputText.trim(),
           createdAt: new Date().toISOString(),
           completed: false,
-          id: ""
+          id: "",
         });
         setTasks((prev) => [...prev, newTask]);
       } catch (error) {
@@ -60,21 +67,64 @@ export function useTasks() {
     setInputText("");
   };
 
- const toggleTask = async (id: string) => {
+  const toggleTask = async (id: string) => {
+    try {
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+      const updatedTask = await patchStatus(id, !task.completed);
 
-  try {
-    const task = tasks.find(t => t.id === id);
-    if (!task) return;
-    const updatedTask = await patchStatus(id, !task.completed);
+      setTasks((prev) =>
+        prev.map((task) => (task.id === id ? updatedTask : task))
+      );
+    } catch (error) {
+      console.error("Error toggling task", error);
+    }
+  };
 
-    setTasks((prev) =>
-      prev.map((task) => (task.id === id ? updatedTask : task))
-    );
-  } catch (error) {
-    console.error("Error toggling task", error);
-  }
-};
+  const handleDeleteTask = async (id: string) => {
+    try {
+      await deleteTask(id);
+      setTasks((prev) => prev.filter((task) => task.id !== id));
+    } catch (error) {
+      console.error("Error deleting task", error);
+    }
+  };
 
+  const handleEditClick = (id: string) => {
+    const taskToEdit = tasks.find((t) => t.id === id);
+    if (taskToEdit) {
+      setInputText(taskToEdit.title);
+      setEditingTaskId(id);
+      setCurrentState("input");
+    }
+  };
+  const handleOK = async () => {
+    if (!inputText.trim()) return;
+
+    if (editingTaskId) {
+      const taskToUpdate = tasks.find((t) => t.id === editingTaskId);
+      if (!taskToUpdate) return;
+
+      const updatedTask = {
+        ...taskToUpdate,
+        title: inputText,
+      };
+
+      try {
+        const saved = await updateTask(editingTaskId, updatedTask);
+        setTasks((prev) =>
+          prev.map((task) => (task.id === editingTaskId ? saved : task))
+        );
+        setEditingTaskId(null);
+        setInputText("");
+        setCurrentState("initial");
+      } catch (error) {
+        console.error("Error updating task", error);
+      }
+    } else {
+      await handleAdd();
+    }
+  };
   return {
     tasks,
     currentState,
@@ -85,5 +135,7 @@ export function useTasks() {
     handleAdd,
     handleCancel,
     toggleTask,
+    handleDeleteTask,
+    handleEditClick,
   };
 }

@@ -17,23 +17,23 @@ describe("TaskListView", () => {
   };
 
   it("muestra el mensaje para añadir tareas cuando está en estado initial", () => {
-    render(<TaskListView {...defaultProps} />);
+    render(<TaskListView onDeleteTask={()=>{}} onEditClick={()=>{}} {...defaultProps} />);
     expect(screen.getByText("Type to add new task")).toBeInTheDocument();
   });
 
   it("llama onAddClick al hacer clic en el contenedor initial", () => {
-    render(<TaskListView {...defaultProps} />);
+    render(<TaskListView onDeleteTask={()=>{}} onEditClick={()=>{}} {...defaultProps} />);
     fireEvent.click(screen.getByText("Type to add new task"));
     expect(defaultProps.onAddClick).toHaveBeenCalled();
   });
 
   it("muestra el campo de input cuando currentState es 'input'", () => {
-    render(<TaskListView {...defaultProps} currentState="input" />);
+    render(<TaskListView onDeleteTask={()=>{}} onEditClick={()=>{}} {...defaultProps} currentState="input" />);
     expect(screen.getByPlaceholderText("Type to add new task")).toBeInTheDocument();
   });
 
   it("muestra los botones Today, Public, Normal, Estimation y Open", () => {
-    render(<TaskListView {...defaultProps} currentState="input" />);
+    render(<TaskListView onDeleteTask={()=>{}} onEditClick={()=>{}} {...defaultProps} currentState="input" />);
     expect(screen.getByText("Today")).toBeInTheDocument();
     expect(screen.getByText("Public")).toBeInTheDocument();
     expect(screen.getByText("Normal")).toBeInTheDocument();
@@ -43,7 +43,7 @@ describe("TaskListView", () => {
 
   it("renderiza una tarea correctamente", () => {
     const task = { id: "1", title: "Complete @assignment by www.expale.com", completed: false, createdAt: "2025-06-03T00:00:00Z" };
-    render(<TaskListView {...defaultProps} tasks={[task]} />);
+    render(<TaskListView onDeleteTask={()=>{}} onEditClick={()=>{}} {...defaultProps} tasks={[task]} />);
     expect(screen.getByText("@assignment")).toBeInTheDocument();
     expect(screen.getByText("Link 1")).toBeInTheDocument();
   });

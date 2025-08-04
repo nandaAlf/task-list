@@ -12,6 +12,8 @@ export function TaskListContainer() {
     handleAdd,
     handleCancel,
     toggleTask,
+    handleDeleteTask,
+    handleEditClick
   } = useTasks();
 
 
@@ -26,6 +28,8 @@ export function TaskListContainer() {
       onAdd={handleAdd}
       onCancel={handleCancel}
       onToggleTask={toggleTask}
+      onDeleteTask={handleDeleteTask}
+      onEditClick={handleEditClick}
     />
   );
 }
