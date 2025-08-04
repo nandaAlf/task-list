@@ -1,12 +1,26 @@
-import { useState } from "react";
+// useTasks.ts
+import { useEffect, useState } from "react";
 import type { Task } from "../types/task";
+import { getTasks, createTask, patchStatus,  } from "../api/api";
 
 type ViewState = "initial" | "input" | "typing";
 
-export function useTasks(initialTasks: Task[] = []) {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+export function useTasks() {
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [currentState, setCurrentState] = useState<ViewState>("initial");
   const [inputText, setInputText] = useState("");
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const data = await getTasks();
+        setTasks(data);
+      } catch (error) {
+        console.error("Error loading tasks", error);
+      }
+    };
+    loadTasks();
+  }, []);
 
   const handleAddClick = () => {
     setCurrentState("input");
@@ -15,29 +29,27 @@ export function useTasks(initialTasks: Task[] = []) {
 
   const handleInputChange = (value: string) => {
     setInputText(value);
-    if (value.trim() !== "" && currentState === "input") {
-      setCurrentState("typing");
-    } else if (value.trim() === "" && currentState === "typing") {
-      setCurrentState("input");
-    }
+    setCurrentState(value.trim() ? "typing" : "input");
   };
 
   const handleOK = () => {
-    if (inputText.trim() === "") {
-      setCurrentState("initial");
-      setInputText("");
-    }
+    setCurrentState("initial");
+    setInputText("");
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (inputText.trim() !== "") {
-      const newTask: Task = {
-        id:Date.now().toString(),
-        title: inputText.trim(),
-        createdAt: new Date().toISOString(),
-        completed: false,
-      };
-      setTasks([...tasks, newTask]);
+      try {
+        const newTask = await createTask({
+          title: inputText.trim(),
+          createdAt: new Date().toISOString(),
+          completed: false,
+          id: ""
+        });
+        setTasks((prev) => [...prev, newTask]);
+      } catch (error) {
+        console.error("Error creating task", error);
+      }
       setCurrentState("initial");
       setInputText("");
     }
@@ -48,13 +60,20 @@ export function useTasks(initialTasks: Task[] = []) {
     setInputText("");
   };
 
-  const toggleTask = (id: string) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
+ const toggleTask = async (id: string) => {
+
+  try {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+    const updatedTask = await patchStatus(id, !task.completed);
+
+    setTasks((prev) =>
+      prev.map((task) => (task.id === id ? updatedTask : task))
     );
-  };
+  } catch (error) {
+    console.error("Error toggling task", error);
+  }
+};
 
   return {
     tasks,
