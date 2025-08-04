@@ -1,7 +1,8 @@
 import axios from "axios";
 import type { Task } from "../types/task";
 
-const API_URL = "http://localhost:8000";
+// const API_URL = "http://localhost:8000"; #local
+const API_URL = "https://task-list-395r.onrender.com";    // production
 
 // Guardar y recuperar token del localStorage
 const getToken = () => localStorage.getItem("token");

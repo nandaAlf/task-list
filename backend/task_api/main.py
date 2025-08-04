@@ -16,7 +16,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  #vite url
+    allow_origins=["http://localhost:5173","https://task-list-six-lime.vercel.app/"],  #vite url
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
