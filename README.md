@@ -1,69 +1,53 @@
-# React + TypeScript + Vite
+# Task Manager App 📝
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**A personal task management application**
 
-Currently, two official plugins are available:
+- **Frontend**: Vite + React + TypeScript + TailwindCSS  
+- **Backend**: FastAPI + SQLite  
+- **Despliegue**: Vercel (Frontend) + Render (Backend)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔗 **Production URL**: [https://task-list-six-lime.vercel.app/](https://task-list-six-lime.vercel.app/)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🔐 Authentication
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+The API uses JSON Web Tokens (JWT) authentication.
+The login process generates an access token that must be included in authenticated requests (via header Authorization: Bearer <token>)
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 👤  Test User
+During the test, the app automatically starts logged in with an existing valid user:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🧑 Username: alice  
+🔑 Password: password1234
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Características 
+✅ List, create, and edit tasks
+📝 Supports rich syntax: mentions, URLs, emails, links
+📱 Responsive design with TailwindCSS
+🌐 Production-ready deployment (Vercel + Render)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Local Setup 🛠️
+
+### Backend (FastAPI)
+
+1. Create file`.env`:
+SECRET_KEY= "supersecretkey123"
+
+2. Run commands:
+bash
+$cd backend
+$python -m venv venv
+# Windows:
+$venv\Scripts\activate
+# Mac/Linux:
+$source venv/bin/activate
+
+$pip install -r requirements.txt
+$uvicorn task_api.main:app --reload
+
+### Frontend (React)
+bash
+$npm install
+$npm run dev

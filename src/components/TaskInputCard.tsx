@@ -1,4 +1,3 @@
-
 import { IconButton } from "./IconButton";
 import { Button } from "./Button";
 import {
@@ -13,7 +12,7 @@ import {
 } from "react-feather";
 import { useIsMobile } from "../hook/useIsMobile";
 import { HighlightedInput } from "./HighlightedInput";
-
+import { useEffect, useRef } from "react";
 
 interface Props {
   inputText: string;
@@ -33,6 +32,15 @@ export function TaskInputCard({
   currentState,
 }: Props) {
   const isMobile = useIsMobile();
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Enfocar automáticamente al montar el componente
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <div className="bg-white border border-gray-100 rounded-lg space-y-1">
       <div className="flex items-start gap-3  p-2">
@@ -41,6 +49,7 @@ export function TaskInputCard({
         </div>
 
         <HighlightedInput
+          ref={inputRef} // Pasamos la ref al componente interno
           value={inputText}
           onChange={onInputChange}
           placeholder="Type to add new task"

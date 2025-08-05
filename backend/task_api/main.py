@@ -158,7 +158,6 @@ async def patch_task(
     result = await db.execute(select(Task).where(Task.id == task_id))
     task = result.scalars().first()
     if not task:
-        print("agua")
         raise HTTPException(status_code=404, detail="Tarea no encontrada")
     else: 
         print("aaaaaaaaaaaa")

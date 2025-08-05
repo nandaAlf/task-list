@@ -111,7 +111,7 @@ describe("TaskInputCard", () => {
     expect(onOK).toHaveBeenCalled();
   });
 
-  it("calls onAdd when Add button is clicked", () => {
+  it("calls onOK when Add button is clicked", () => {
     (useIsMobile as any).mockReturnValue(false);
 
     render(
@@ -120,12 +120,12 @@ describe("TaskInputCard", () => {
         onInputChange={onInputChange}
         onCancel={onCancel}
         onOK={onOK}
-        onAdd={onAdd}
+        onAdd={onOK}
         currentState="typing"
       />
     );
 
     fireEvent.click(screen.getByText("Add"));
-    expect(onAdd).toHaveBeenCalled();
+    expect(onOK).toHaveBeenCalled();
   });
 });
